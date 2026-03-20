@@ -1,6 +1,7 @@
 'use client'
 import React, {useEffect, useState} from 'react';
 import styles from './test.module.css';
+import { finished } from 'stream';
 
 // Your Test Starts Here
 
@@ -17,8 +18,8 @@ interface Task {
     finished : boolean;
 }
 
-export default function TaskManager():  {
-    const [tasks, setTasks] = useState]>([]);
+export default function TaskManager() {
+    const [tasks, setTasks] = useState<Task[]>([]);
     const [inputTitle, setInputTitle] = useState("");
     const [priority, setPriority] = useState<Priority>("Medium");
     const [error, setError] = useState("");
@@ -28,5 +29,32 @@ export default function TaskManager():  {
             setError("Title cannot be empty");
             return;
         }
+        const newTask : Task = {
+            id : crypto.randomUUID(),
+            title : inputTitle.trim(),
+            priority,
+            finished : false
+        };
+
+        setTasks(prev => [newTask, ...prev]);
+        setInputTitle("");
+        setError("");
+    }
+
+    //Pressing enter in the input title should also add a task
+    function handlekeyDown(e : React.KeyboardEvent<HTMLInputElement>){
+        if (e.key == "Enter") addTask();
+    }
+
+    // Completed tasks
+    function toggleComplete(id : string){
+        setTasks(prev => 
+            prev.map(t => t.id == id ? {...t, finished: !t.finished } : t)
+        );
+    }
+
+    // Deleting a task
+    function deleteTask(id : string){
+        setTasks(prev => prev.filter(t => t.id !== id));
     }
 }
