@@ -185,9 +185,6 @@ export default function TaskManager() {
                 )}
             </div>
 
-            {/*Editing*/}
-            
-
             {/*Filtering*/}
             <div className={styles.filter} role="group" aria-label="Filter tasks">
                 {(["All", "Active", "Completed"] as Filter[]).map(t => (
@@ -217,8 +214,20 @@ export default function TaskManager() {
                                 onChange={() => toggleComplete(task.id)}
                                 checked={task.finished}
                                 />
-                                
-                                <div className={styles.taskInfo}>
+
+                                {/*Editing*/}
+                                {editId === task.id ? (
+                                    <><input value={editTitle}
+                                        onChange={e => setEditTitle(e.target.value)} />\
+                                        <select value={editPriority}
+                                        onChange={e => setEditPriority(e.target.value as Priority)}>
+                                            <option value="Low">Low</option>
+                                            <option value="Medium">Medium</option>
+                                            <option value="High">High</option>
+                                        </select>
+                                    </>
+                                ) : (
+                                    <div className={styles.taskInfo}>
                                     <span className={`${styles.taskTitle} $ {task.finished ? styles.taskTitleDone : ""}`}>
                                         {task.title} :   
                                     </span>
@@ -226,12 +235,32 @@ export default function TaskManager() {
                                         {task.priority}
                                     </span>
                                 </div>
+                                )
+                                
+                                }
                                 <div className={styles.actions}>
+                                    {/*Delete button*/}
                                     <button
                                     className={styles.deleteBtn}
                                     onClick={() => deleteTask(task.id)}>
                                     Delete
                                     </button>
+
+                                    {editId  === task.id ? (
+                                        <button
+                                            className={styles.SavetBtn}
+                                            aria-label="Save Task"
+                                            onClick={() => finishEdit(task.id)}>
+                                                Save
+                                        </button>       
+                                    ) : (
+                                        <button
+                                                className={styles.EditBtn}
+                                                aria-label="Edit Task"
+                                                onClick={() => editTask(task)}>
+                                                Edit
+                                        </button>
+                                    )}
                                 </div>
                             </li>
                             ))
