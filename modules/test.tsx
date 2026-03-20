@@ -120,4 +120,37 @@ export default function TaskManager() {
         )}
       </div>
     </div>
+
+    {/*Filtering*/}
+    <div className={styles.filter} role="group" aria-label="Filter tasks">
+        {(["All", "Active", "Completed"] as Filter[]).map(f => (
+            <button
+            key = {f}
+            className={`${styles.filterBtn} ${filter === f ? styles.filterActive : ""}`}
+            onClick={() => setFilter(f)}
+            aria-pressed={filter === f}
+          >
+            {f}
+            </button>
+        ))}
+    </div>
+
+    // List of tasks
+    {sortedTasks.length === 0 ? (
+        <p className={styles.emptyMsg}>No tasks to show</p>
+    ) : (
+        <ul className={styles.taskList}>
+          {sortedTasks.map(task => (
+            <li
+              key={task.id}
+              className={`${styles.taskItem} ${task.finished ? styles.taskCompleted : ""}`}
+            >
+                <input type="checkbox"
+                className={styles.checkbox}
+                checked={task.finished}
+                onChange={() => toggleComplete(task.id)}
+                aria-label={`Mark "${task.title}" as ${task.finished ? "active" : "complete"}`}
+                />
+                
+    )}
 }
