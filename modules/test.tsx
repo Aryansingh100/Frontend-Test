@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import styles from './test.module.css';
 import { finished } from 'stream';
+import { json } from 'stream/consumers';
 
 // Your Test Starts Here
 
@@ -16,6 +17,23 @@ interface Task {
     title : string;
     priority : Priority;
     finished : boolean;
+}
+
+// Function to map priority class to styles
+function priorityClass(p : Priority){
+    if (p === "Low") return styles.priorityLow;
+    if (p === "High") return styles.priorityHigh;
+    return styles.priorityMedium;
+}
+
+// Function to load data from Local Storage
+function dataPersistance(): Task[] {
+    try{
+        const raw = localStorage.getItem("tasks");
+        return raw ? (JSON.parse(raw) as Task[]) : [];
+    } catch {
+        return [];
+    }
 }
 
 export default function TaskManager() {
@@ -41,6 +59,16 @@ export default function TaskManager() {
         setInputTitle("");
         setError("");
     }
+
+    // Persistance functions
+    useEffect(() => {
+        setTasks(dataPersistance());
+    }, [tasks]);
+
+    // Persist to local storage
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks]);
 
     //Pressing enter in the input title should also add a task
     function handlekeyDown(e : React.KeyboardEvent<HTMLInputElement>){
