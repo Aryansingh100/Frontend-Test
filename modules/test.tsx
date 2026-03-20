@@ -218,8 +218,10 @@ export default function TaskManager() {
                                 {/*Editing*/}
                                 {editId === task.id ? (
                                     <><input value={editTitle}
+                                        className={styles.editInput}
                                         onChange={e => setEditTitle(e.target.value)} />\
                                         <select value={editPriority}
+                                        className={styles.editPriority}
                                         onChange={e => setEditPriority(e.target.value as Priority)}>
                                             <option value="Low">Low</option>
                                             <option value="Medium">Medium</option>
@@ -228,10 +230,10 @@ export default function TaskManager() {
                                     </>
                                 ) : (
                                     <div className={styles.taskInfo}>
-                                    <span className={`${styles.taskTitle} $ {task.finished ? styles.taskTitleDone : ""}`}>
+                                    <span className={`${styles.taskTitle} ${task.finished ? styles.taskTitleDone : ""}`}>
                                         {task.title} :   
                                     </span>
-                                    <span className={`${styles.taskPriority} $ {priorityClass(task.priority)}`}>
+                                    <span className={`${styles.taskPriority} ${priorityClass(task.priority)}`}>
                                         {task.priority}
                                     </span>
                                 </div>
@@ -248,14 +250,14 @@ export default function TaskManager() {
 
                                     {editId  === task.id ? (
                                         <button
-                                            className={styles.SavetBtn}
+                                            className={styles.saveBtn}
                                             aria-label="Save Task"
                                             onClick={() => finishEdit(task.id)}>
                                                 Save
                                         </button>       
                                     ) : (
                                         <button
-                                                className={styles.EditBtn}
+                                                className={styles.editBtn}
                                                 aria-label="Edit Task"
                                                 onClick={() => editTask(task)}>
                                                 Edit

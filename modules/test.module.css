@@ -100,6 +100,53 @@
     background: red;
 }
 
+.editInput{
+    display: flex;
+    flex: auto;
+    padding: 5px 10px;
+    border: 1px;
+    border-color: burlywood;
+    border-radius: 4px;
+}
+
+.editSelect{
+    display: flex;
+    flex: auto;
+    padding: 5px 10px;
+    border: 1px;
+    border-color: darkred;
+    border-radius: 4px;
+}
+
+.editBtn {
+  padding: 4px 10px;
+  margin: 10px;
+  font-size: medium;
+  background: rgb(189, 0, 50);
+  color :rgb(206, 255, 233);
+  border: 1px;
+  border-radius: 4px;
+}
+
+.editBtn:hover{
+    background: rgb(3, 4, 60);
+}
+
+.saveBtn {
+  padding: 4px 10px;
+  margin: 10px;
+  font-size: medium;
+  background: rgb(0, 98, 50);
+  color :rgb(255, 202, 8);
+  border: 1px;
+  border-radius: 4px;
+}
+
+.saveBtn:hover{
+    background:rgb(0, 9, 60)
+}
+
+
 .taskList{
     padding: 5px;
     gap: 20px;
@@ -129,9 +176,9 @@
 .taskPriority{
     font-size: large;
     font-weight: 500;
-    padding: 4px 8px;
-    border: 5px;
-    text-transform: uppercase;
+    padding: 1px 1px;
+    margin-left: 15px;
+    border: 2px;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
