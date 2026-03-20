@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import styles from './test.module.css';
 import { finished } from 'stream';
 import { json } from 'stream/consumers';
+import { title } from 'process';
 
 // Your Test Starts Here
 
@@ -19,23 +20,6 @@ interface Task {
     finished : boolean;
 }
 
-// Function to map priority class to styles
-function priorityClass(p : Priority){
-    if (p === "Low") return styles.priorityLow;
-    if (p === "High") return styles.priorityHigh;
-    return styles.priorityMedium;
-}
-
-// Function to load data from Local Storage
-function dataPersistance(): Task[] {
-    try{
-        const raw = localStorage.getItem("tasks");
-        return raw ? (JSON.parse(raw) as Task[]) : [];
-    } catch {
-        return [];
-    }
-}
-
 export default function TaskManager() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [filter, setFilter] = useState<Filter>("All");
@@ -43,6 +27,28 @@ export default function TaskManager() {
     const [priority, setPriority] = useState<Priority>("Medium");
     const [search, setSearch] = useState("");
     const [error, setError] = useState("");
+
+    // Adding edit Functions
+    const [editId, setEditId] = useState<String>("");
+    const [editTitle, setEditTitle] = useState("");
+    const [editPriority, setEditPriority] = useState<Priority>("Medium");
+
+    // Function to map priority class to styles
+    function priorityClass(p : Priority){
+        if (p === "Low") return styles.priorityLow;
+        if (p === "High") return styles.priorityHigh;
+        return styles.priorityMedium;
+    }
+
+    // Function to load data from Local Storage
+    function dataPersistance(): Task[] {
+        try{
+            const raw = localStorage.getItem("tasks");
+            return raw ? (JSON.parse(raw) as Task[]) : [];
+        } catch {
+            return [];
+        }
+    }
 
     function addTask(){
         if (!inputTitle.trim()){
@@ -76,6 +82,21 @@ export default function TaskManager() {
         if (e.key == "Enter") addTask();
     }
 
+    // Edit task
+    function editTask(task : Task){
+        setEditId(task.id);
+        setEditTitle(task.title);
+        setEditPriority(task.priority);
+    }
+
+    function finishEdit(id : string){
+        setTasks(prev => prev.map(t => t.id === id ? 
+            {...t, title: editTitle, priority: editPriority} : t
+            )
+        );    
+        setEditId("");
+    }
+
     // Completed tasks
     function toggleComplete(id : string){
         setTasks(prev => 
@@ -106,7 +127,7 @@ export default function TaskManager() {
             <h1 className={styles.title}>Task Management Component</h1>
             <div className={styles.form}>
                 <div className={styles.row}>
-                    <label htmlFor='task-title' style={{display: "none"}}>
+                    <label htmlFor='task-title'>
                         Task title
                     </label>
                     {/* Task Form*/}
@@ -150,7 +171,7 @@ export default function TaskManager() {
                 id = "search"
                 type="search"
                 className={styles.inputSearch}
-                placeholder="Search tasks"
+                placeholder="Enter task"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 style={{ marginBottom : 10}}
@@ -164,23 +185,26 @@ export default function TaskManager() {
                 )}
             </div>
 
+            {/*Editing*/}
+            
+
             {/*Filtering*/}
             <div className={styles.filter} role="group" aria-label="Filter tasks">
-                {(["All", "Active", "Completed"] as Filter[]).map(f => (
+                {(["All", "Active", "Completed"] as Filter[]).map(t => (
                     <button
-                    key = {f}
-                    className={`${styles.filterBtn} ${filter === f ? styles.filterActive : ""}`}
-                    onClick={() => setFilter(f)}
-                    aria-pressed={filter === f}
+                    key = {t}
+                    className={`${styles.filterBtn} ${filter === t ? styles.filterActive : ""}`}
+                    onClick={() => setFilter(t)}
+                    aria-pressed={filter === t}
                 >
-                    {f}
+                    {t}
                     </button>
                 ))}
             </div>
 
             {/*List of tasks*/}
             {sortedTasks.length === 0 ? (
-                <p className={styles.emptyMsg}>No tasks to show</p> ) : 
+                <p className={styles.emptyMsg}>No tasks currently</p> ) : 
                 (
                     <ul className={styles.taskList}>
                         {sortedTasks.map(task => (
@@ -189,10 +213,9 @@ export default function TaskManager() {
                             className={`${styles.taskItem} ${task.finished ? styles.taskCompleted : ""}`}
                             >
                                 <input type="checkbox"
-                                className={styles.checkbox}
-                                checked={task.finished}
+                                className={styles.checkbox} 
                                 onChange={() => toggleComplete(task.id)}
-                                aria-label={`Mark "${task.title}" as ${task.finished ? "active" : "complete"}`}
+                                checked={task.finished}
                                 />
                                 
                                 <div className={styles.taskInfo}>
@@ -206,8 +229,7 @@ export default function TaskManager() {
                                 <div className={styles.actions}>
                                     <button
                                     className={styles.deleteBtn}
-                                    onClick={() => deleteTask(task.id)}
-                                    aria-label={`Delete "${task.title}"`}>
+                                    onClick={() => deleteTask(task.id)}>
                                     Delete
                                     </button>
                                 </div>
