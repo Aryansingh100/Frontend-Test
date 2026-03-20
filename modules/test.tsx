@@ -153,7 +153,14 @@ export default function TaskManager() {
                                 aria-label={`Mark "${task.title}" as ${task.finished ? "active" : "complete"}`}
                                 />
                                 
-                            )
+                                <div className={styles.taskInfo}>
+                                    <span className={`${styles.taskTitle} ? {task.finished ? styles.taskTitleDone : ""}`}>
+                                        {task.title} :   
+                                    </span>
+                                    <span className={`${styles.taskPriority} ? {priorityClass(task.priority)}`}>
+                                        {task.priority}
+                                    </span>
+                                </div>
                                 <div className={styles.actions}>
                                     <button
                                     className={styles.deleteBtn}
