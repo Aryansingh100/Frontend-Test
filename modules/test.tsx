@@ -57,4 +57,21 @@ export default function TaskManager() {
     function deleteTask(id : string){
         setTasks(prev => prev.filter(t => t.id !== id));
     }
+
+    //Filter by status
+    const visibleTasks = tasks.filter(t => {
+        if (filter === "Active") return !t.finished;
+        if (filter === "Completed") return !t.finished;
+        return true;
+    })
+
+    //Completed tasks are visually distinct and appear below active tasks
+    const activeTasks = visibleTasks.filter(t => !t.finished);
+    const completedTasks = visibleTasks.filter(t => t.finished);
+    const sortedTasks = [...activeTasks, ...completedTasks];
+
+    <div className={styles.container}>
+        <h1 className={styles.title}>Task Management Component</h1>
+        
+    </div>
 }
