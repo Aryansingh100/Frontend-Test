@@ -101,7 +101,7 @@
 .deleteBtn {
   padding: 4px 10px;
   font-size: medium;
-  background: darkgoldenrod;
+  background: rgb(27, 0, 65);
   color :chartreuse;
   border: 1px;
   border-radius: 4px;
@@ -160,7 +160,7 @@
 
 .taskList{
     padding: 5px;
-    gap: 20px;
+    gap: 5px;
     display: flex;
     flex-direction: column;
 }
@@ -172,7 +172,7 @@
     padding-right: 7px;
     padding-bottom: 20px;
     padding-top: 20px;
-    gap: 20px;
+    gap: 10px;
     border: 2px;
     border-radius: 8px;
 }
@@ -187,14 +187,15 @@
 .taskPriority{
     font-size: large;
     font-weight: 500;
-    padding: 1px 1px;
+    padding: 7px 7px;
     margin-left: 15px;
     border: 2px;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border-radius: 3px;
+    font-family :'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
 .priorityLow{
-    background-color: darkkhaki;
+    background-color: rgb(255, 119, 221);
 }
 
 .priorityMedium{
