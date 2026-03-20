@@ -20,6 +20,7 @@ interface Task {
 
 export default function TaskManager() {
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [filter, setFilter] = useState<Filter>("All");
     const [inputTitle, setInputTitle] = useState("");
     const [priority, setPriority] = useState<Priority>("Medium");
     const [error, setError] = useState("");
@@ -61,7 +62,7 @@ export default function TaskManager() {
     //Filter by status
     const visibleTasks = tasks.filter(t => {
         if (filter === "Active") return !t.finished;
-        if (filter === "Completed") return !t.finished;
+        if (filter === "Completed") return t.finished;
         return true;
     })
 
@@ -70,87 +71,103 @@ export default function TaskManager() {
     const completedTasks = visibleTasks.filter(t => t.finished);
     const sortedTasks = [...activeTasks, ...completedTasks];
 
-    <div className={styles.container}>
-        <h1 className={styles.title}>Task Management Component</h1>
-        <div className={styles.form}>
-        <div className={styles.row}>
-        <label htmlFor='task-title' style={{display: "none"}}>
-            Task title
-        </label>
-        {/* Task Form*/}
-        <input
-            id = "task-title"
-            type="text"
-            className={`${styles.input} ${error ? styles.inputError : ""}`}
-            placeholder="Task title..."
-            value={inputTitle}
-            onChange={e => {
-                setInputTitle(e.target.value);
-                if (error) setError("");
-            }}
-            onKeyDown={handlekeyDown}
-            aria-describedby={error ? "title-error" : undefined}
-        />
+    return(
+        <div className={styles.container}>
+            <h1 className={styles.title}>Task Management Component</h1>
+            <div className={styles.form}>
+                <div className={styles.row}>
+                    <label htmlFor='task-title' style={{display: "none"}}>
+                        Task title
+                    </label>
+                    {/* Task Form*/}
+                    <input
+                        id = "task-title"
+                        type="text"
+                        className={`${styles.input} ${error ? styles.inputError : ""}`}
+                        placeholder="Task title..."
+                        value={inputTitle}
+                        onChange={e => {
+                            setInputTitle(e.target.value);
+                            if (error) setError("");
+                        }}
+                        onKeyDown={handlekeyDown}
+                        aria-describedby={error ? "title-error" : undefined}
+                    />
 
-        {/* Selecting priority*/}
-         <label htmlFor="task-priority" style={{ display: "none" }}>
-            Priority
-          </label>
-          <select
-            id="task-priority"
-            className={styles.select}
-            value={priority}
-            onChange={e => setPriority(e.target.value as Priority)}
-          >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
+                    {/* Selecting priority*/}
+                    <label htmlFor="task-priority" style={{ display: "none" }}>
+                        Priority
+                    </label>
+                    <select
+                        id="task-priority"
+                        className={styles.select}
+                        value={priority}
+                        onChange={e => setPriority(e.target.value as Priority)}
+                    >
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
 
-          <button className={styles.addButton} onClick={addTask}>
-            Add Task
-          </button>
+                    <button className={styles.addButton} onClick={addTask}>
+                        Add Task
+                    </button>
+                </div>
+
+                {/* Validation error*/}
+                {error && (
+                <p id="title-error" className={styles.errorMsg} role="alert">
+                    {error}
+                </p>
+                )}
+            </div>
+
+            {/*Filtering*/}
+            <div className={styles.filter} role="group" aria-label="Filter tasks">
+                {(["All", "Active", "Completed"] as Filter[]).map(f => (
+                    <button
+                    key = {f}
+                    className={`${styles.filterBtn} ${filter === f ? styles.filterActive : ""}`}
+                    onClick={() => setFilter(f)}
+                    aria-pressed={filter === f}
+                >
+                    {f}
+                    </button>
+                ))}
+            </div>
+
+            {/*List of tasks*/}
+            {sortedTasks.length === 0 ? (
+                <p className={styles.emptyMsg}>No tasks to show</p> ) : 
+                (
+                    <ul className={styles.taskList}>
+                        {sortedTasks.map(task => (
+                            <li
+                            key={task.id}
+                            className={`${styles.taskItem} ${task.finished ? styles.taskCompleted : ""}`}
+                            >
+                                <input type="checkbox"
+                                className={styles.checkbox}
+                                checked={task.finished}
+                                onChange={() => toggleComplete(task.id)}
+                                aria-label={`Mark "${task.title}" as ${task.finished ? "active" : "complete"}`}
+                                />
+                                
+                            )
+                                <div className={styles.actions}>
+                                    <button
+                                    className={styles.deleteBtn}
+                                    onClick={() => deleteTask(task.id)}
+                                    aria-label={`Delete "${task.title}"`}>
+                                    Delete
+                                    </button>
+                                </div>
+                            </li>
+                            ))
+                        }
+                    </ul>
+                )
+            }
         </div>
-
-        {/* Validation error*/}
-        {error && (
-          <p id="title-error" className={styles.errorMsg} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
-    </div>
-
-    {/*Filtering*/}
-    <div className={styles.filter} role="group" aria-label="Filter tasks">
-        {(["All", "Active", "Completed"] as Filter[]).map(f => (
-            <button
-            key = {f}
-            className={`${styles.filterBtn} ${filter === f ? styles.filterActive : ""}`}
-            onClick={() => setFilter(f)}
-            aria-pressed={filter === f}
-          >
-            {f}
-            </button>
-        ))}
-    </div>
-
-    // List of tasks
-    {sortedTasks.length === 0 ? (
-        <p className={styles.emptyMsg}>No tasks to show</p>
-    ) : (
-        <ul className={styles.taskList}>
-          {sortedTasks.map(task => (
-            <li
-              key={task.id}
-              className={`${styles.taskItem} ${task.finished ? styles.taskCompleted : ""}`}
-            >
-                <input type="checkbox"
-                className={styles.checkbox}
-                checked={task.finished}
-                onChange={() => toggleComplete(task.id)}
-                aria-label={`Mark "${task.title}" as ${task.finished ? "active" : "complete"}`}
-                />
-                
-    )}
+    );
 }
