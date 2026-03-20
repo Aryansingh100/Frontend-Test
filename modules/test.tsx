@@ -72,6 +72,52 @@ export default function TaskManager() {
 
     <div className={styles.container}>
         <h1 className={styles.title}>Task Management Component</h1>
-        
+        <div className={styles.form}>
+        <div className={styles.row}>
+        <label htmlFor='task-title' style={{display: "none"}}>
+            Task title
+        </label>
+        {/* Task Form*/}
+        <input
+            id = "task-title"
+            type="text"
+            className={`${styles.input} ${error ? styles.inputError : ""}`}
+            placeholder="Task title..."
+            value={inputTitle}
+            onChange={e => {
+                setInputTitle(e.target.value);
+                if (error) setError("");
+            }}
+            onKeyDown={handlekeyDown}
+            aria-describedby={error ? "title-error" : undefined}
+        />
+
+        {/* Selecting priority*/}
+         <label htmlFor="task-priority" style={{ display: "none" }}>
+            Priority
+          </label>
+          <select
+            id="task-priority"
+            className={styles.select}
+            value={priority}
+            onChange={e => setPriority(e.target.value as Priority)}
+          >
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+
+          <button className={styles.addButton} onClick={addTask}>
+            Add Task
+          </button>
+        </div>
+
+        {/* Validation error*/}
+        {error && (
+          <p id="title-error" className={styles.errorMsg} role="alert">
+            {error}
+          </p>
+        )}
+      </div>
     </div>
 }
