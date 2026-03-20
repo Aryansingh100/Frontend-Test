@@ -38,6 +38,16 @@
     border-color: red;
 }
 
+.inputSearch{
+    width: 70%;
+    flex: auto;
+    padding: 8px 12px;
+    border: 1px;
+    border-color: purple;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
 .select{
     padding-top: 8px;
     padding-bottom: 10px;

@@ -41,6 +41,7 @@ export default function TaskManager() {
     const [filter, setFilter] = useState<Filter>("All");
     const [inputTitle, setInputTitle] = useState("");
     const [priority, setPriority] = useState<Priority>("Medium");
+    const [search, setSearch] = useState("");
     const [error, setError] = useState("");
 
     function addTask(){
@@ -63,7 +64,7 @@ export default function TaskManager() {
     // Persistance functions
     useEffect(() => {
         setTasks(dataPersistance());
-    }, [tasks]);
+    }, []);
 
     // Persist to local storage
     useEffect(() => {
@@ -93,6 +94,7 @@ export default function TaskManager() {
         if (filter === "Completed") return t.finished;
         return true;
     })
+    .filter(t => t.title.toLowerCase().includes(search.toLowerCase()));
 
     //Completed tasks are visually distinct and appear below active tasks
     const activeTasks = visibleTasks.filter(t => !t.finished);
@@ -140,7 +142,19 @@ export default function TaskManager() {
                     <button className={styles.addButton} onClick={addTask}>
                         Add Task
                     </button>
-                </div>
+                </div> 
+
+                {/* Searching*/}
+                <label htmlFor="search">Search Tasks</label>
+                <input
+                id = "search"
+                type="search"
+                className={styles.inputSearch}
+                placeholder="Search tasks"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                style={{ marginBottom : 10}}
+                />
 
                 {/* Validation error*/}
                 {error && (
@@ -182,10 +196,10 @@ export default function TaskManager() {
                                 />
                                 
                                 <div className={styles.taskInfo}>
-                                    <span className={`${styles.taskTitle} ? {task.finished ? styles.taskTitleDone : ""}`}>
+                                    <span className={`${styles.taskTitle} $ {task.finished ? styles.taskTitleDone : ""}`}>
                                         {task.title} :   
                                     </span>
-                                    <span className={`${styles.taskPriority} ? {priorityClass(task.priority)}`}>
+                                    <span className={`${styles.taskPriority} $ {priorityClass(task.priority)}`}>
                                         {task.priority}
                                     </span>
                                 </div>
