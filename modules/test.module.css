@@ -1,5 +1,5 @@
 .container{
-    height: 80vh;
+    height: 200vh;
     background-color: aliceblue;
     max-width: 500px;
     margin: 30px auto;
@@ -21,7 +21,15 @@
 
 .row{
     display: flex;
+    flex-direction: column;
     margin: 8px;
+}
+
+.secondRow{
+    display: flex;
+    margin: 10px;
+    gap: 10 px;
+    align-items: center;
 }
 
 .input{
@@ -40,6 +48,7 @@
 
 .inputSearch{
     width: 70%;
+    margin: 10px;
     flex: auto;
     padding: 8px 12px;
     border: 1px;
@@ -57,14 +66,15 @@
 }
 
 .addButton{
-    padding: auto;
-    background: wheat;
-    color: brown;
+    margin: 10px;
+    padding: 5px 5px;
+    background: rgb(53, 0, 198);
+    color: rgb(255, 224, 224);
     border-radius: 6px;
 }
 
 .addButton:hover{
-    background: skyblue;
+    background: rgb(255, 24, 240);
 }
 
 .filters{
@@ -75,7 +85,8 @@
 }
 
 .filterBtn{
-    gap: 40px;
+    gap: 10px;
+    margin: 10px;
     align-items: center;
     padding: 4px 10px;
     border: 1px;

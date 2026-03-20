@@ -128,7 +128,6 @@ export default function TaskManager() {
             <div className={styles.form}>
                 <div className={styles.row}>
                     <label htmlFor='task-title'>
-                        Task title
                     </label>
                     {/* Task Form*/}
                     <input
@@ -145,24 +144,26 @@ export default function TaskManager() {
                         aria-describedby={error ? "title-error" : undefined}
                     />
 
-                    {/* Selecting priority*/}
-                    <label htmlFor="task-priority" style={{ display: "none" }}>
-                        Priority
-                    </label>
-                    <select
-                        id="task-priority"
-                        className={styles.select}
-                        value={priority}
-                        onChange={e => setPriority(e.target.value as Priority)}
-                    >
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
-                        <option value="High">High</option>
-                    </select>
+                    <div className={styles.secondRow}>
+                        {/* Selecting priority*/}
+                        <label htmlFor="task-priority" style={{ display: "none" }}>
+                            Priority
+                        </label>
+                        <select
+                            id="task-priority"
+                            className={styles.select}
+                            value={priority}
+                            onChange={e => setPriority(e.target.value as Priority)}
+                        >
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
 
-                    <button className={styles.addButton} onClick={addTask}>
-                        Add Task
-                    </button>
+                        <button className={styles.addButton} onClick={addTask}>
+                            Add Task
+                        </button>
+                    </div>
                 </div> 
 
                 {/* Searching*/}
